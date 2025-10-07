@@ -1,6 +1,6 @@
 # Rust Integration Labs
 
-A Rust workspace for learning and experimenting with various integrations.
+A Rust workspace for learning and experimenting with various rust integrations.
 
 ## Getting Started
 

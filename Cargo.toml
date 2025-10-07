@@ -3,3 +3,18 @@ members = [
     "valkey-stream",
 ]
 resolver = "3"
+
+[workspace.dependencies]
+# -- Async
+redis = { version = "0.32.7", features = ["tokio-comp"] }
+tokio = { version = "1.47.1", features = ["full"] }
+# -- Others
+derive_more = { version = "2.0.1", features = ["display", "from"] }
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+unused = { level = "allow", priority = -1 } # For exploratory dev.
+
+[workspace.lints.clippy]
+unwrap_used = "warn"
+expect_used = "warn"

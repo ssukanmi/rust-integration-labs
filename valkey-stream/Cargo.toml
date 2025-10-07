@@ -4,3 +4,8 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+tokio = { workspace = true, features = ["full"] }
+redis = { workspace = true, features = ["tokio-comp"] }
+
+[lints]
+workspace = true
