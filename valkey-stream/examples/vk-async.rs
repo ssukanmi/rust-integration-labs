@@ -7,6 +7,7 @@ use redis::{
 use tokio::time::sleep;
 
 #[tokio::main]
+#[expect(clippy::expect_used)]
 async fn main() -> Result<(), Box<dyn Error>> {
     let client = Client::open("redis://127.0.0.1:6379")?;
 
