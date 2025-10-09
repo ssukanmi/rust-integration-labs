@@ -4,11 +4,18 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+# -- Async
 tokio = { workspace = true, features = ["full"] }
+# -- Serde
+serde = { workspace = true, features = ["derive"] }
+serde_json = { workspace = true }
+# -- Web
 axum = { workspace = true }
+tower-http = { workspace = true, features = ["fs"] }
 
 [lints]
 workspace = true
 
 [dev-dependencies]
 anyhow = { workspace = true }
+httpc-test = { workspace = true }
