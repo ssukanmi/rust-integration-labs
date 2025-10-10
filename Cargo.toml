@@ -1,5 +1,5 @@
 [workspace]
-members = [ "axum-webservice", 
+members = [ "axum-webservice", "rust-job", "rust-jwt", 
     "rust-sqlite",
     "valkey-stream",
 ]
@@ -8,8 +8,10 @@ resolver = "3"
 [workspace.dependencies]
 anyhow = "1.0.100"
 axum = "0.8.6"
+chrono = "0.4.42"
 derive_more = { version = "2.0.1", features = ["display", "from"] }
 httpc-test = "0.1.10"
+jsonwebtoken = "9.3.1"
 pretty-sqlite = "0.3.0"
 redis = { version = "0.32.7", features = ["tokio-comp"] }
 rusqlite = { version = "0.37.0", features = ["bundled", "serde_json"] }
