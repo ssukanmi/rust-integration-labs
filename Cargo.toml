@@ -1,5 +1,5 @@
 [workspace]
-members = [ "axum-webservice", "rust-job", "rust-jwt", 
+members = [ "axum-webservice", "pipeviewer", "rust-job", "rust-jwt", 
     "rust-sqlite",
     "valkey-stream",
 ]
@@ -9,6 +9,7 @@ resolver = "3"
 anyhow = "1.0.100"
 axum = "0.8.6"
 chrono = "0.4.42"
+clap = { version = "4.5.48", features = ["derive"] }
 derive_more = { version = "2.0.1", features = ["display", "from"] }
 httpc-test = "0.1.10"
 jsonwebtoken = "9.3.1"

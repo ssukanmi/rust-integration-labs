@@ -1,6 +1,6 @@
 #![allow(clippy::unwrap_used)]
 
-    use axum::{Router, routing};
+use axum::{Router, routing};
 use tokio::net::TcpListener;
 
 use crate::controller::{get_info_handler, login_handler};

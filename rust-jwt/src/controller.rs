@@ -1,4 +1,7 @@
-use axum::{Json, http::{HeaderMap, StatusCode}};
+use axum::{
+    Json,
+    http::{HeaderMap, StatusCode},
+};
 use jsonwebtoken::{DecodingKey, EncodingKey, Header, Validation, decode, encode};
 
 use crate::model::{Claims, LoginInfo, LoginResponse};
@@ -25,7 +28,7 @@ pub async fn login_handler(
             Ok(tok) => tok,
             Err(e) => {
                 eprintln!("Error generating token {e}");
-                return Err(StatusCode::INTERNAL_SERVER_ERROR)
+                return Err(StatusCode::INTERNAL_SERVER_ERROR);
             }
         };
 
@@ -38,23 +41,27 @@ pub async fn login_handler(
 pub async fn get_info_handler(header_map: HeaderMap) -> Result<Json<String>, StatusCode> {
     if let Some(auth_header) = header_map.get("Authorization")
         && let Ok(auth_header_str) = auth_header.to_str()
-            && auth_header_str.starts_with("Bearer") {
-                let token = auth_header_str.trim_start_matches("Bearer ").to_string();
+        && auth_header_str.starts_with("Bearer")
+    {
+        let token = auth_header_str.trim_start_matches("Bearer ").to_string();
 
-                return match decode::<Claims>(&token, &DecodingKey::from_secret("secret".as_ref()), &Validation::default()) {
-                    Ok(_) => {
-                        let info = "You're valid here is Info ".to_string();
-                        Ok(Json(info))
-                    }
-                    Err(e) => {
-                        eprintln!("Error generating token {e}");
-                        Err(StatusCode::UNAUTHORIZED)
-                    }
-                }       
+        return match decode::<Claims>(
+            &token,
+            &DecodingKey::from_secret("secret".as_ref()),
+            &Validation::default(),
+        ) {
+            Ok(_) => {
+                let info = "You're valid here is Info ".to_string();
+                Ok(Json(info))
             }
+            Err(e) => {
+                eprintln!("Error generating token {e}");
+                Err(StatusCode::UNAUTHORIZED)
+            }
+        };
+    }
 
     Err(StatusCode::UNAUTHORIZED)
-
 }
 
 pub fn is_valid_user(username: &str, password: &str) -> bool {
