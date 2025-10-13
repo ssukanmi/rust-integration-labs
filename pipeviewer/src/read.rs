@@ -2,10 +2,10 @@ use crate::CHUNK_SIZE;
 use std::{
     fs::File,
     io::{self, BufReader, Read, Result},
-    sync::{Arc, Mutex},
+    sync::mpsc::Sender,
 };
 
-pub fn read_loop(infile: &Option<String>, quit: Arc<Mutex<bool>>) -> Result<()> {
+pub fn read_loop(infile: &Option<String>, stats_tx: Sender<Vec<u8>>) -> Result<()> {
     let mut reader: Box<dyn Read> = {
         if let Some(file) = infile {
             Box::new(BufReader::new(File::open(file)?))
@@ -23,14 +23,18 @@ pub fn read_loop(infile: &Option<String>, quit: Arc<Mutex<bool>>) -> Result<()> 
             Err(_) => break,
         };
         // todo: send this buffer to stats thread
-        let _ = Vec::from(&buffer[..num_read]);
+        if stats_tx.send(Vec::from(&buffer[..num_read])).is_err() {
+            break;
+        }
     }
 
     // todo: send empy buffer to stats thread
+    let _ = stats_tx.send(Vec::new());
+
     // let mut quit = quit.lock().unwrap();
-    if let Ok(mut quit) = quit.lock() {
-        *quit = true;
-    }
+    // if let Ok(mut quit) = quit.lock() {
+    //     *quit = true;
+    // }
 
     Ok(())
 }

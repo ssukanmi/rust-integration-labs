@@ -1,27 +1,20 @@
 use clap::Parser;
 use pipeviewer::{args::Args, read, stats, write};
-use std::{
-    error::Error,
-    sync::{Arc, Mutex},
-    thread,
-};
+use std::{error::Error, sync::mpsc, thread};
 
 fn main() -> Result<(), Box<dyn Error>> {
-    // let args = Args::parse();
     let Args {
         infile,
         outfile,
         silent,
     } = Args::parse();
 
-    let mut _total_bytes = 0;
+    let (stats_tx, stats_rx) = mpsc::channel();
+    let (write_tx, write_rx) = mpsc::channel();
 
-    let quit = Arc::new(Mutex::new(false));
-    let (quit1, quit2, quit3) = (Arc::clone(&quit), Arc::clone(&quit), Arc::clone(&quit));
-
-    let read_handle = thread::spawn(move || read::read_loop(&infile, quit1));
-    let stats_handle = thread::spawn(move || stats::stats_loop(silent, quit2));
-    let write_handle = thread::spawn(move || write::write_loop(&outfile, quit3));
+    let read_handle = thread::spawn(move || read::read_loop(&infile, stats_tx));
+    let stats_handle = thread::spawn(move || stats::stats_loop(silent, stats_rx, write_tx));
+    let write_handle = thread::spawn(move || write::write_loop(&outfile, write_rx));
 
     let read_io_result = read_handle
         .join()
@@ -37,6 +30,9 @@ fn main() -> Result<(), Box<dyn Error>> {
     stats_io_result?;
     write_io_result?;
 
+    // let args = Args::parse();
+    // let mut _total_bytes = 0;
+    //
     // loop {
     //     let buffer = match read::read(&args.infile) {
     //         Ok(x) if x.is_empty() => break,

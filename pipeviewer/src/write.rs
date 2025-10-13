@@ -1,10 +1,10 @@
 use std::{
     fs::File,
     io::{self, BufWriter, ErrorKind, Result, Write},
-    sync::{Arc, Mutex},
+    sync::mpsc::Receiver,
 };
 
-pub fn write_loop(outfile: &Option<String>, quit: Arc<Mutex<bool>>) -> Result<()> {
+pub fn write_loop(outfile: &Option<String>, writer_rx: Receiver<Vec<u8>>) -> Result<()> {
     let mut writer: Box<dyn Write> = {
         if let Some(file) = outfile {
             Box::new(BufWriter::new(File::create(file)?))
@@ -13,18 +13,23 @@ pub fn write_loop(outfile: &Option<String>, quit: Arc<Mutex<bool>>) -> Result<()
         }
     };
 
-    loop {
+    while let Ok(buffer) = writer_rx.recv() {
         // todo: recieve bytes to write from stats
-        let buffer: Vec<u8> = Vec::new();
+        // let buffer: Vec<u8> = Vec::new();
+        // let buffer = writer_rx.recv().unwrap();
 
-        {
-            // let quit = quit.lock().unwrap();
-            if let Ok(quit) = quit.lock()
-                && *quit
-            {
-                break;
-            }
+        if buffer.is_empty() {
+            break;
         }
+
+        // {
+        //     // let quit = quit.lock().unwrap();
+        //     if let Ok(quit) = quit.lock()
+        //         && *quit
+        //     {
+        //         break;
+        //     }
+        // }
 
         if let Err(e) = writer.write_all(&buffer) {
             if e.kind() == ErrorKind::BrokenPipe {
