@@ -1,7 +1,7 @@
+use crossbeam::channel::Receiver;
 use std::{
     fs::File,
     io::{self, BufWriter, ErrorKind, Result, Write},
-    sync::mpsc::Receiver,
 };
 
 pub fn write_loop(outfile: &Option<String>, writer_rx: Receiver<Vec<u8>>) -> Result<()> {
@@ -14,22 +14,9 @@ pub fn write_loop(outfile: &Option<String>, writer_rx: Receiver<Vec<u8>>) -> Res
     };
 
     while let Ok(buffer) = writer_rx.recv() {
-        // todo: recieve bytes to write from stats
-        // let buffer: Vec<u8> = Vec::new();
-        // let buffer = writer_rx.recv().unwrap();
-
         if buffer.is_empty() {
             break;
         }
-
-        // {
-        //     // let quit = quit.lock().unwrap();
-        //     if let Ok(quit) = quit.lock()
-        //         && *quit
-        //     {
-        //         break;
-        //     }
-        // }
 
         if let Err(e) = writer.write_all(&buffer) {
             if e.kind() == ErrorKind::BrokenPipe {

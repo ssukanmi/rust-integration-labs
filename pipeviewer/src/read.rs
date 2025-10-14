@@ -1,11 +1,15 @@
 use crate::CHUNK_SIZE;
+use crossbeam::channel::Sender;
 use std::{
     fs::File,
     io::{self, BufReader, Read, Result},
-    sync::mpsc::Sender,
 };
 
-pub fn read_loop(infile: &Option<String>, stats_tx: Sender<Vec<u8>>) -> Result<()> {
+pub fn read_loop(
+    infile: &Option<String>,
+    stats_tx: Sender<usize>,
+    write_tx: Sender<Vec<u8>>,
+) -> Result<()> {
     let mut reader: Box<dyn Read> = {
         if let Some(file) = infile {
             Box::new(BufReader::new(File::open(file)?))
@@ -22,19 +26,14 @@ pub fn read_loop(infile: &Option<String>, stats_tx: Sender<Vec<u8>>) -> Result<(
             Ok(x) => x,
             Err(_) => break,
         };
-        // todo: send this buffer to stats thread
-        if stats_tx.send(Vec::from(&buffer[..num_read])).is_err() {
+        let _ = stats_tx.send(num_read);
+        if write_tx.send(Vec::from(&buffer[..num_read])).is_err() {
             break;
         }
     }
 
-    // todo: send empy buffer to stats thread
-    let _ = stats_tx.send(Vec::new());
-
-    // let mut quit = quit.lock().unwrap();
-    // if let Ok(mut quit) = quit.lock() {
-    //     *quit = true;
-    // }
+    let _ = stats_tx.send(0);
+    let _ = write_tx.send(Vec::new());
 
     Ok(())
 }
