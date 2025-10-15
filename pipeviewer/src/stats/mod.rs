@@ -1,3 +1,8 @@
+//! Progress statistics and display.
+//!
+//! This module handles receiving byte counts from the read thread,
+//! calculating statistics, and displaying progress with colored output.
+
 mod timer;
 
 use crossbeam::channel::Receiver;
@@ -13,7 +18,9 @@ use std::{
 
 use crate::stats::timer::Timer;
 
+/// Trait for formatting seconds as HH:MM:SS time format.
 trait TimeOutput {
+    /// Converts seconds to a formatted time string.
     fn as_time(&self) -> String;
 }
 
@@ -25,6 +32,24 @@ impl TimeOutput for u64 {
     }
 }
 
+/// Continuously receives byte counts and displays progress statistics.
+///
+/// # Arguments
+///
+/// * `silent` - If true, suppresses all progress output.
+/// * `stats_rx` - Channel receiver for byte counts from the read thread.
+///
+/// # Returns
+///
+/// Returns `Ok(())` on successful completion or an I/O error.
+///
+/// # Behavior
+///
+/// - Receives byte counts from the channel
+/// - Calculates total bytes, elapsed time, and transfer rate
+/// - Updates display every 100ms (when timer is ready)
+/// - Shows colored output: red for bytes, green for time, blue for rate
+/// - Stops when receiving 0 bytes (EOF signal)
 pub fn stats_loop(silent: bool, stats_rx: Receiver<usize>) -> Result<()> {
     let mut total_bytes = 0;
     let start = Instant::now();
@@ -57,6 +82,21 @@ pub fn stats_loop(silent: bool, stats_rx: Receiver<usize>) -> Result<()> {
     Ok(())
 }
 
+/// Outputs formatted progress statistics to stderr with colored text.
+///
+/// # Arguments
+///
+/// * `stderr` - Standard error output handle.
+/// * `bytes` - Total bytes transferred.
+/// * `elapsed` - Elapsed time as formatted string (HH:MM:SS).
+/// * `rate` - Transfer rate in bytes per second.
+///
+/// # Output Format
+///
+/// Displays: `{bytes} {elapsed} [{rate}b/s]` with colors:
+/// - Red: bytes count
+/// - Green: elapsed time
+/// - Blue: transfer rate
 fn output_progress(stderr: &mut Stderr, bytes: usize, elapsed: String, rate: f64) {
     let bytes = style::style(format!("{} ", bytes)).with(Color::Red);
     let elapsed = style::style(elapsed).with(Color::Green);
@@ -72,6 +112,19 @@ fn output_progress(stderr: &mut Stderr, bytes: usize, elapsed: String, rate: f64
     let _ = stderr.flush();
 }
 
+/// Simple stats function (legacy).
+///
+/// # Arguments
+///
+/// * `silent` - If true, suppresses output.
+/// * `num_read` - Number of bytes read in this iteration.
+/// * `total_bytes` - Mutable reference to total bytes counter.
+/// * `last` - If true, this is the final stats update.
+///
+/// # Note
+///
+/// This function is kept for compatibility but is not used in the current
+/// multi-threaded implementation. Use [`stats_loop`] instead.
 pub fn stats(silent: bool, num_read: usize, total_bytes: &mut usize, last: bool) {
     *total_bytes += num_read;
 
@@ -79,6 +132,25 @@ pub fn stats(silent: bool, num_read: usize, total_bytes: &mut usize, last: bool)
         eprint!("\r{total_bytes}");
         if last {
             eprintln!();
+        }
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use super::TimeOutput;
+
+    #[test]
+    fn test_time_format() {
+        let pairs: Vec<(u64, &str)> = vec![
+            (5, "0:00:05"),
+            (60, "0:01:00"),
+            (154, "0:02:34"),
+            (3603, "1:00:03"),
+        ];
+
+        for (i, o) in pairs {
+            assert_eq!(i.as_time().as_str(), o);
         }
     }
 }
