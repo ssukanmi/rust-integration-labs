@@ -1,3 +1,5 @@
+mod timer;
+
 use crossbeam::channel::Receiver;
 use crossterm::{
     cursor, execute,
@@ -6,8 +8,10 @@ use crossterm::{
 };
 use std::{
     io::{self, Result, Stderr, Write},
-    time::{Duration, Instant},
+    time::Instant,
 };
+
+use crate::stats::timer::Timer;
 
 trait TimeOutput {
     fn as_time(&self) -> String;
@@ -18,37 +22,6 @@ impl TimeOutput for u64 {
         let (hours, left) = (*self / 3600, *self % 3600);
         let (mins, secs) = (left / 60, left % 60);
         format!("{}:{:02}:{:02}", hours, mins, secs)
-    }
-}
-
-struct Timer {
-    last_instant: Instant,
-    delta: Duration,
-    period: Duration,
-    count_down: Duration,
-    ready: bool,
-}
-
-impl Timer {
-    fn new() -> Self {
-        let now = Instant::now();
-        Self {
-            last_instant: now,
-            delta: Duration::default(),
-            period: Duration::from_millis(100),
-            count_down: Duration::default(),
-            ready: true,
-        }
-    }
-
-    fn update(&mut self) {
-        let now = Instant::now();
-        self.delta = now - self.last_instant;
-        self.last_instant = now;
-        self.count_down = self.count_down.checked_sub(self.delta).unwrap_or_else(|| {
-            self.ready = true;
-            self.period
-        });
     }
 }
 
