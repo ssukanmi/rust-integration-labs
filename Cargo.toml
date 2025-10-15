@@ -11,6 +11,7 @@ axum = "0.8.6"
 chrono = "0.4.42"
 clap = { version = "4.5.49", features = ["derive", "env"] }
 crossbeam = "0.8.4"
+crossterm = "0.29.0"
 derive_more = { version = "2.0.1", features = ["display", "from"] }
 httpc-test = "0.1.10"
 jsonwebtoken = "9.3.1"
