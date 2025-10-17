@@ -1,5 +1,5 @@
 [workspace]
-members = [ "axum-webservice", "pipeviewer", "rust-job", "rust-jwt", 
+members = [ "axum-webservice", "pipeviewer", "rust-in-action", "rust-job", "rust-jwt", 
     "rust-sqlite",
     "valkey-stream",
 ]
