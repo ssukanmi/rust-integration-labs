@@ -1,5 +1,5 @@
 [workspace]
-members = [ "axum-webservice", "file-sim", "grep-lite", "mandelbrot", "pipeviewer", "rust-in-action", "rust-job", "rust-jwt", 
+members = [ "axum-webservice", "bit-patterns", "file-sim", "grep-lite", "mandelbrot", "pipeviewer", "rust-in-action", "rust-job", "rust-jwt", 
     "rust-sqlite",
     "valkey-stream",
 ]
@@ -28,7 +28,6 @@ tokio = { version = "1.48.0", features = ["full"] }
 
 [workspace.lints.rust]
 unsafe_code = "forbid"
-# unused = { level = "allow", priority = -1 } # For exploratory dev.
 
 [workspace.lints.clippy]
 unwrap_used = "warn"
