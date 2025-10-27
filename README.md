@@ -7,6 +7,7 @@ A Rust workspace for learning and experimenting with various Rust concepts, from
 ### Low-Level & Systems Programming
 
 - **[bit-patterns](bit-patterns/)** - Explore binary representations of floats (IEEE 754), fixed-point numbers (Q7), and bit manipulation
+- **[chip8-emu](chip8-emu/)** - CHIP-8 virtual machine emulator
 - **[file-sim](file-sim/)** - File system simulation demonstrating error handling and traits
 - **[rust-in-action](rust-in-action/)** - Examples from "Rust in Action" book
 
@@ -32,6 +33,7 @@ cargo build
 
 # Run a specific project
 cargo run -p bit-patterns
+cargo run -p chip8-emu
 cargo run -p grep-lite
 cargo run -p file-sim
 
