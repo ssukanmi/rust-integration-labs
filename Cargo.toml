@@ -1,5 +1,5 @@
 [workspace]
-members = [ "axum-webservice", "bit-patterns", "chip8-emu", "file-sim", "grep-lite", "mandelbrot", "pipeviewer", "rust-in-action", "rust-job", "rust-jwt", 
+members = [ "axum-webservice", "bit-patterns", "chip8-emu", "file-sim", "grep-lite", "mandelbrot", "pipeviewer", "retro-chat", "rust-in-action", "rust-job", "rust-jwt", 
     "rust-sqlite",
     "valkey-stream",
 ]
@@ -12,6 +12,7 @@ chrono = "0.4.42"
 clap = { version = "4.5.49", features = ["derive", "env"] }
 crossbeam = "0.8.4"
 crossterm = "0.29.0"
+cursive = "0.21.1"
 derive_more = { version = "2.0.1", features = ["display", "from"] }
 httpc-test = "0.1.10"
 jsonwebtoken = "9.3.1"
