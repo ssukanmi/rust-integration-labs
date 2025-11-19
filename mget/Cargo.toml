@@ -1,0 +1,19 @@
+[package]
+name = "mget"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+clap = { workspace = true, features = ["derive"] }
+rand = { workspace = true }
+smoltcp = { workspace = true, features = ["proto-igmp", "proto-ipv4", "verbose", "log"] }
+trust-dns = { workspace = true }
+url = { workspace = true }
+
+# [lints]
+# workspace = true
+
+
+# WIP
+[lints.rust]
+unused = { level = "allow", priority = -1 }

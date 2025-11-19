@@ -1,10 +1,5 @@
-use std::error::Error;
+use std::error;
 
-fn main() -> Result<(), Box<dyn Error>> {
-    let ptr = 42 as *const Vec<String>;
-    unsafe {
-        let new_addr = ptr.offset(4);
-        println!("{:p} -> {:p}", ptr, new_addr);
-    }
+fn main() -> Result<(), Box<dyn error::Error>> {
     Ok(())
 }

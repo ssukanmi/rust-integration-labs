@@ -1,0 +1,31 @@
+[package]
+name = "actionkv"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+name = "libactionkv"
+path = "src/lib.rs"
+
+[[bin]]
+name = "akv_mem"
+path = "src/akv_mem.rs"
+
+[[bin]]
+name = "akv_disk"
+path = "src/akv_disk.rs"
+
+[dependencies]
+anyhow = { workspace = true }
+bincode = { workspace = true }
+byteorder = { workspace = true }
+clap = { workspace = true, features = ["derive"] }
+crc = { workspace = true }
+serde = { workspace = true, features = ["derive"] }
+
+# [lints]
+# workspace = true
+
+# WIP
+[lints.rust]
+unused = { level = "allow", priority = -1 }

@@ -6,6 +6,7 @@ A Rust workspace for learning and experimenting with various Rust concepts, from
 
 ### Low-Level & Systems Programming
 
+- **[actionkv](actionkv/)** - Key-value store with in-memory and disk-based implementations (CRC checksums, binary serialization)
 - **[bit-patterns](bit-patterns/)** - Explore binary representations of floats (IEEE 754), fixed-point numbers (Q7), and bit manipulation
 - **[chip8-emu](chip8-emu/)** - CHIP-8 virtual machine emulator
 - **[file-sim](file-sim/)** - File system simulation demonstrating error handling and traits
@@ -16,6 +17,8 @@ A Rust workspace for learning and experimenting with various Rust concepts, from
 - **[grep-lite](grep-lite/)** - A lightweight grep implementation
 - **[pipeviewer](pipeviewer/)** - Pipeline data viewer with progress indicators
 - **[mandelbrot](mandelbrot/)** - Mandelbrot set fractal generator
+- **[mget](mget/)** - HTTP client with low-level networking (DNS resolution, Ethernet, TCP/IP stack)
+- **[progress-iter](progress-iter/)** - Progress bar iterator demonstrating type-state pattern and type-driven API design
 
 ### Web & Backend
 

@@ -1,5 +1,5 @@
 [workspace]
-members = [ "axum-webservice", "bit-patterns", "chip8-emu", "file-sim", "grep-lite", "mandelbrot", "pipeviewer", "retro-chat", "rust-in-action", "rust-job", "rust-jwt", 
+members = ["actionkv", "axum-webservice", "bit-patterns", "chip8-emu", "file-sim", "grep-lite", "mandelbrot", "mget", "pipeviewer", "progress-iter", "retro-chat", "rust-in-action", "rust-job", "rust-jwt",
     "rust-sqlite",
     "valkey-stream",
 ]
@@ -8,8 +8,11 @@ resolver = "3"
 [workspace.dependencies]
 anyhow = "1.0.100"
 axum = "0.8.6"
+bincode = "1.3.3"
+byteorder = "1.5.0"
 chrono = "0.4.42"
-clap = { version = "4.5.49", features = ["derive", "env"] }
+clap = { version = "4.5.51", features = ["derive", "env"] }
+crc = "3.3.0"
 crossbeam = "0.8.4"
 crossterm = "0.29.0"
 cursive = "0.21.1"
@@ -24,8 +27,11 @@ regex = "1.12.2"
 rusqlite = { version = "0.37.0", features = ["bundled", "serde_json"] }
 serde = { version = "1.0.228", features = ["derive"] }
 serde_json = "1.0.145"
-tower-http = { version = "0.6.6", features = ["fs"] }
+smoltcp = { version = "0.6.0" }
 tokio = { version = "1.48.0", features = ["full"] }
+tower-http = { version = "0.6.6", features = ["fs"] }
+trust-dns = "0.16.0"
+url = "2.5.7"
 
 [workspace.lints.rust]
 unsafe_code = "forbid"
